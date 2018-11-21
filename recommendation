@@ -1,0 +1,32 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Nov 20 15:49:47 2018
+
+@author: vivekmishra
+"""
+from sklearn.metrics.pairwise import cosine_similarity
+import pandas as pd
+#id = 'iUdgD8kYU-E'
+
+class rec:
+    
+    def recommendation(self,id,feature_df):
+        cluster_no = feature_df[feature_df['id'] == feature_df]['clusters']
+        cluster_no = cluster_no.item()
+        #select data of that cluster
+        slice_df = feature_df[feature_df['clusters'] == cluster_no]
+        #cosine similarity matrix
+        cos_sim = cosine_similarity(slice_df.values)
+        df_temp = pd.DataFrame(cos_sim, columns=slice_df.index.values, index=slice_df.index)
+        
+        interest_list = df_temp[id]
+        index_min = list(interest_list.argsort()[:3].keys())
+        index_max = list(interest_list.argsort()[::-1][:4].keys())
+        
+        return index_min,index_max
+
+    
+    
+    
+    
